@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { isInstalled, isStoragePersisted, requestPersistentStorage } from '@/db/storage'
 
@@ -30,6 +32,18 @@ export function Settings() {
               In Safari, tap Share → Add to Home Screen, then always open ApexForm from that icon.
             </p>
           )}
+        </CardContent>
+      </Card>
+
+      <Card className="mt-4">
+        <CardHeader>
+          <CardTitle>Training profile</CardTitle>
+          <CardDescription>Days, session length, equipment, goals and experience.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="outline" className="w-full" render={<Link to="/onboarding" />}>
+            Edit profile
+          </Button>
         </CardContent>
       </Card>
     </>

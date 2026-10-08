@@ -1,5 +1,7 @@
 import { ClipboardList, History, House, Settings } from 'lucide-react'
-import { NavLink, Outlet } from 'react-router'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { Navigate, NavLink, Outlet } from 'react-router'
+import { getProfile } from '@/db/profile'
 import { cn } from '@/lib/utils'
 
 const tabs = [
@@ -10,6 +12,11 @@ const tabs = [
 ]
 
 export function Layout() {
+  const profile = useLiveQuery(getProfile, [])
+
+  if (profile === undefined) return null // still loading
+  if (!profile?.onboarding_complete) return <Navigate to="/onboarding" replace />
+
   return (
     <div className="mx-auto flex min-h-dvh max-w-lg flex-col pt-[env(safe-area-inset-top)]">
       <main className="flex-1 px-4 pt-4 pb-24">
