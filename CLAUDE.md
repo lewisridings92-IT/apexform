@@ -12,7 +12,7 @@ Personal strength-training planner and log, used by one person on an iPhone. Reb
 
 ## Stack
 
-React 19, Vite, TypeScript, Tailwind v4, shadcn/ui (base-nova style, Base UI primitives, `cn` from the `cn` package), lucide icons, Dexie and `dexie-react-hooks`, React Router (hash router), Vitest with `fake-indexeddb`. Recharts will be added for charts.
+React 19, Vite, TypeScript, Tailwind v4, shadcn/ui (base-nova style, Base UI primitives, `cn` from the `cn` package), lucide icons, Dexie and `dexie-react-hooks`, React Router (hash router), Vitest with `fake-indexeddb`. Recharts for charts (colours as `--series-*` tokens in `src/index.css`).
 
 ## Layout
 
