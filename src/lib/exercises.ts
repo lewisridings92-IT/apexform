@@ -14,6 +14,7 @@ const C = true // compound
 const I = false // isolation
 
 // Grouped by the main muscle trained. Names are unique across the library.
+// Order matters: without anchors, the plan generator prefers earlier entries.
 const LIBRARY: Record<MuscleGroup, Row[]> = {
   Chest: [
     ['Barbell Bench Press', 'Barbell', C],
@@ -31,19 +32,19 @@ const LIBRARY: Record<MuscleGroup, Row[]> = {
     ['Band Chest Press', 'Bands', C],
   ],
   Back: [
-    ['Conventional Deadlift', 'Barbell', C],
     ['Barbell Row', 'Barbell', C],
-    ['Pendlay Row', 'Barbell', C],
+    ['Lat Pulldown', 'Cable', C],
+    ['Pull-Up', 'Bodyweight', C],
     ['Chest-Supported DB Row', 'Dumbbell', C],
+    ['Seated Cable Row', 'Cable', C],
     ['One-Arm Dumbbell Row', 'Dumbbell', C],
     ['Machine Row', 'Machine', C],
     ['T-Bar Row', 'Machine', C],
-    ['Lat Pulldown', 'Cable', C],
-    ['Seated Cable Row', 'Cable', C],
-    ['Straight-Arm Pulldown', 'Cable', I],
+    ['Pendlay Row', 'Barbell', C],
     ['Weighted Pull-Up', 'Bodyweight', C],
-    ['Pull-Up', 'Bodyweight', C],
     ['Chin-Up', 'Bodyweight', C],
+    ['Conventional Deadlift', 'Barbell', C],
+    ['Straight-Arm Pulldown', 'Cable', I],
     ['Kettlebell Row', 'Kettlebell', C],
     ['Band Lat Pulldown', 'Bands', C],
   ],
@@ -78,9 +79,9 @@ const LIBRARY: Record<MuscleGroup, Row[]> = {
   ],
   Hamstrings: [
     ['Romanian Deadlift', 'Barbell', C],
-    ['Stiff-Leg Deadlift', 'Barbell', C],
-    ['Good Morning', 'Barbell', C],
     ['Dumbbell RDL', 'Dumbbell', C],
+    ['Good Morning', 'Barbell', C],
+    ['Stiff-Leg Deadlift', 'Barbell', C],
     ['Lying Leg Curl', 'Machine', I],
     ['Seated Leg Curl', 'Machine', I],
     ['Cable Pull-Through', 'Cable', C],
@@ -90,9 +91,9 @@ const LIBRARY: Record<MuscleGroup, Row[]> = {
   ],
   Glutes: [
     ['Barbell Hip Thrust', 'Barbell', C],
-    ['Sumo Deadlift', 'Barbell', C],
-    ['Dumbbell Step-Up', 'Dumbbell', C],
     ['Machine Hip Thrust', 'Machine', C],
+    ['Dumbbell Step-Up', 'Dumbbell', C],
+    ['Sumo Deadlift', 'Barbell', C],
     ['Hip Abduction Machine', 'Machine', I],
     ['Cable Kickback', 'Cable', I],
     ['Single-Leg Glute Bridge', 'Bodyweight', I],
@@ -145,10 +146,10 @@ const LIBRARY: Record<MuscleGroup, Row[]> = {
     ['Barbell Wrist Curl', 'Barbell', I],
     ['Reverse EZ Bar Curl', 'EZ Bar', I],
     ['Dumbbell Wrist Curl', 'Dumbbell', I],
-    ["Farmer's Carry", 'Dumbbell', C],
+    ["Farmer's Carry", 'Dumbbell', I],
     ['Cable Reverse Curl', 'Cable', I],
     ['Dead Hang', 'Bodyweight', I],
-    ["Kettlebell Farmer's Carry", 'Kettlebell', C],
+    ["Kettlebell Farmer's Carry", 'Kettlebell', I],
   ],
 }
 
@@ -162,6 +163,13 @@ export const EXERCISES: Exercise[] = Object.entries(LIBRARY).flatMap(([muscle, r
 )
 
 const BY_NAME = new Map(EXERCISES.map((e) => [e.name, e]))
+
+// Done for time rather than reps.
+const TIMED = new Set(['Plank', 'Dead Hang', "Farmer's Carry", "Kettlebell Farmer's Carry"])
+
+export function isTimed(name: string): boolean {
+  return TIMED.has(name)
+}
 
 export function findExercise(name: string): Exercise | undefined {
   return BY_NAME.get(name)

@@ -70,7 +70,7 @@ The app is only for the user, on their **iPhone**. There are no accounts and no 
 - **Inputs:** profile (days per week, session length, equipment, goals, experience), anchor lifts, and when regenerating, the last 6 workout logs.
 - **Split:** full body for 2–3 days, upper/lower for 4, push/pull/legs or a hybrid for 5–6, push/pull/legs plus weak points for 7.
 - **Weekly sets per muscle** by experience level, spread across the days that train that muscle.
-- **Reps, RIR and rest by goal** (e.g. strength 3–5 reps, RIR 1–2, rest 3–4 min; hypertrophy 6–12 reps, RIR 1–3, rest 2 min).
+- **Reps, RIR and rest by goal**, in three tiers: the first two compound lifts of the day (main lifts), other compound lifts (secondary) and isolation lifts. E.g. strength main lifts 3–5 reps, RIR 1–2, rest 3–4 min. Rules are in `src/lib/generator/rules.ts`.
 - **Exercises:** anchor lifts first, then the library filtered by equipment, with compound lifts placed first in each day.
 - **Session fit:** estimate the time per set plus rest, then trim accessories until the day fits the session length.
 - **Regenerate:** if reps beat the target, add load (suggested increase), and swap out exercises that have stalled.

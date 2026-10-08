@@ -5,6 +5,7 @@ import {
   EquipmentStep, ExperienceStep, GoalsStep, ScheduleStep,
 } from '@/components/ProfileSteps'
 import { Button } from '@/components/ui/button'
+import { generateAndSavePlan } from '@/db/plans'
 import { getProfile, saveProfile, validateProfile } from '@/db/profile'
 import type { UserProfile } from '@/db/types'
 import { DEFAULT_PROFILE } from '@/lib/options'
@@ -45,6 +46,8 @@ export function Onboarding() {
     if (validateProfile(done)) return
     setSaving(true)
     await saveProfile(done)
+    // A changed profile means the current plan no longer fits it.
+    if (editing) await generateAndSavePlan()
     navigate(editing ? '/settings' : '/anchors', { replace: true })
   }
 

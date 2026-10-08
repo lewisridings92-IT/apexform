@@ -1,11 +1,12 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Check, ChevronDown, Star } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { type AnchorSelection, getAnchors, replaceAnchors, toSelection } from '@/db/anchors'
+import { generateAndSavePlan, getActivePlan } from '@/db/plans'
 import { getProfile } from '@/db/profile'
 import type { MuscleGroup } from '@/db/types'
 import { type Exercise, exercisesFor } from '@/lib/exercises'
@@ -31,11 +32,19 @@ export function Anchors() {
     setSelection({ ...selection, [muscle]: names })
   }
 
+  // Without anchors, still build a plan if there isn't one yet.
+  async function skip() {
+    setSaving(true)
+    if (await getActivePlan()) return navigate('/', { replace: true })
+    await generateAndSavePlan()
+    navigate('/plan', { replace: true })
+  }
+
   async function save() {
     setSaving(true)
     await replaceAnchors(selection!)
-    // Phase 4: generate the plan here and go to /plan.
-    navigate('/', { replace: true })
+    await generateAndSavePlan()
+    navigate('/plan', { replace: true })
   }
 
   return (
@@ -63,7 +72,7 @@ export function Anchors() {
         <Button size="lg" className="w-full" disabled={saving} onClick={save}>
           Save {total} anchor {total === 1 ? 'lift' : 'lifts'}
         </Button>
-        <Button variant="ghost" className="w-full" render={<Link to="/" />}>
+        <Button variant="ghost" className="w-full" disabled={saving} onClick={skip}>
           Skip for now
         </Button>
       </div>

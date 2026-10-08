@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { generateAndSavePlan } from '@/db/plans'
 import { isInstalled, isStoragePersisted, requestPersistentStorage } from '@/db/storage'
 
 export function Settings() {
   const [persisted, setPersisted] = useState<boolean>()
   const installed = isInstalled()
+  const navigate = useNavigate()
+  const [regenerating, setRegenerating] = useState(false)
 
   useEffect(() => {
     requestPersistentStorage().then(() => isStoragePersisted().then(setPersisted))
@@ -46,6 +49,18 @@ export function Settings() {
           </Button>
           <Button variant="outline" className="w-full" render={<Link to="/anchors" />}>
             Edit anchor lifts
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full"
+            disabled={regenerating}
+            onClick={async () => {
+              setRegenerating(true)
+              await generateAndSavePlan().finally(() => setRegenerating(false))
+              navigate('/plan')
+            }}
+          >
+            Regenerate plan from recent sessions
           </Button>
         </CardContent>
       </Card>
