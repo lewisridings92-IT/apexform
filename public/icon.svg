@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0a0a0a"/>
+  <!-- barbell -->
+  <rect x="96" y="244" width="320" height="24" rx="6" fill="#fafafa"/>
+  <rect x="120" y="176" width="36" height="160" rx="8" fill="#fafafa"/>
+  <rect x="164" y="200" width="28" height="112" rx="7" fill="#a3a3a3"/>
+  <rect x="356" y="176" width="36" height="160" rx="8" fill="#fafafa"/>
+  <rect x="320" y="200" width="28" height="112" rx="7" fill="#a3a3a3"/>
+</svg>
