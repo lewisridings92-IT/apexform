@@ -85,7 +85,7 @@ The app is only for the user, on their **iPhone**. There are no accounts and no 
 5. **Workout logger:** timer, set entry, rest timer, suggested weights from the last session, saving after every set.
 6. **Dashboard and history:** stats, recent sessions, progress charts (top weight, e1RM, volume).
 7. **Settings:** profile editing, Export/Import backup, backup reminder, Reset Everything.
-8. **Deploy to the iPhone:** GitHub Pages, install from Safari, check offline use and persistent storage.
+8. **Deploy to the iPhone:** GitHub Pages, install from Safari, check offline use and persistent storage. *Live at https://lewisridings92-it.github.io/apexform/ since 2026-10-08.*
 
 ## Working method with Claude
 

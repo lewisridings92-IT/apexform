@@ -6,7 +6,7 @@ Personal strength-training planner and log, used by one person on an iPhone. Reb
 
 - **Local-only.** No backend, no accounts, no API keys. All data is in IndexedDB on the phone (Dexie). Never add code that sends workout data off the device.
 - **PWA** via `vite-plugin-pwa`, installed from Safari with "Add to Home Screen". It must work offline.
-- **Hosting:** GitHub Pages at `/apexform/`. The build sets `base` from the `GITHUB_PAGES` env var (see `vite.config.ts`). Routing uses hash routes (`#/plan`) so refreshes never 404.
+- **Hosting:** GitHub Pages at https://lewisridings92-it.github.io/apexform/ (repo `lewisridings92-IT/apexform`, public). `.github/workflows/deploy.yml` lints, tests, builds and deploys on every push to `main`. The build sets `base` from the `GITHUB_PAGES` env var (see `vite.config.ts`). Routing uses hash routes (`#/plan`) so refreshes never 404.
 - **Plan generator:** rules only, deterministic, runs in the browser, with unit tests.
 - **Data safety:** keep the Export/Import JSON backup working for every table. Schema changes need a new `db.version(n)` with an upgrade in `src/db/db.ts`; never edit an existing version.
 
