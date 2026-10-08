@@ -1,10 +1,11 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { ChevronRight, Clock, Play } from 'lucide-react'
+import { ChevronRight, Clock, Play, ShieldAlert } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { backupDue, daysSince, lastBackupAt } from '@/db/backup'
 import { db } from '@/db/db'
 import { generateAndSavePlan, getActivePlan } from '@/db/plans'
 import { getProfile } from '@/db/profile'
@@ -19,6 +20,7 @@ export function Dashboard() {
   const plan = useLiveQuery(getActivePlan, [])
   const logs = useLiveQuery(() => db.logs.where('status').equals('complete').toArray(), [])
   const inProgress = useLiveQuery(getInProgress, [])
+  const lastBackup = useLiveQuery(lastBackupAt, [])
   const [busy, setBusy] = useState(false)
 
   const goal = profile?.goals[0]
@@ -34,6 +36,25 @@ export function Dashboard() {
         <Stat label="Volume (kg)" value={logs ? compactKg(totalVolume(logs)) : '…'} />
         <Stat label="Plan days" value={plan?.days.length ?? '–'} />
       </div>
+
+      {logs && lastBackup !== undefined && backupDue(lastBackup, logs.length) && (
+        <Link
+          to="/settings"
+          className="mb-4 flex items-center gap-3 rounded-xl border border-destructive/50 bg-destructive/10 px-4 py-3"
+        >
+          <ShieldAlert className="size-5 text-destructive" />
+          <span className="flex-1">
+            <span className="block font-medium">Back up your data</span>
+            <span className="block text-sm text-muted-foreground">
+              {lastBackup
+                ? `Last backup ${daysSince(lastBackup)} days ago.`
+                : 'Your workouts only exist on this phone.'}{' '}
+              Save a copy to iCloud Drive.
+            </span>
+          </span>
+          <ChevronRight className="size-4" />
+        </Link>
+      )}
 
       {inProgress && (
         <Link
