@@ -128,3 +128,8 @@
     @apply font-sans;
     }
 }
+/* Chart series colours, validated for the dark card surface (dataviz palette, slots 1–2). */
+.dark {
+    --series-1: #3987e5;
+    --series-2: #d95926;
+}

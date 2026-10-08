@@ -6,6 +6,7 @@ import { Dashboard } from './pages/Dashboard'
 import { History } from './pages/History'
 import { Onboarding } from './pages/Onboarding'
 import { Plan } from './pages/Plan'
+import { SessionDetail } from './pages/SessionDetail'
 import { Settings } from './pages/Settings'
 import { Workout } from './pages/Workout'
 
@@ -23,6 +24,7 @@ const router = createHashRouter([
       // Without a day index it resumes the unfinished session.
       { path: 'workout/:dayIndex?', element: <Workout /> },
       { path: 'history', element: <History /> },
+      { path: 'history/:id', element: <SessionDetail /> },
       { path: 'settings', element: <Settings /> },
     ],
   },

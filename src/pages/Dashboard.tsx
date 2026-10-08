@@ -11,11 +11,13 @@ import { getProfile } from '@/db/profile'
 import { getInProgress } from '@/db/sessions'
 import { estimateDayMinutes } from '@/lib/generator/generate'
 import { goalLabel } from '@/lib/options'
+import { compactKg, totalVolume } from '@/lib/stats'
+import { SessionList } from './History'
 
 export function Dashboard() {
   const profile = useLiveQuery(getProfile, [])
   const plan = useLiveQuery(getActivePlan, [])
-  const sessions = useLiveQuery(() => db.logs.where('status').equals('complete').count(), [])
+  const logs = useLiveQuery(() => db.logs.where('status').equals('complete').toArray(), [])
   const inProgress = useLiveQuery(getInProgress, [])
   const [busy, setBusy] = useState(false)
 
@@ -27,8 +29,9 @@ export function Dashboard() {
         subtitle={profile ? `${profile.frequency} days a week · ${profile.session_length} min sessions` : undefined}
       />
 
-      <div className="mb-4 grid grid-cols-2 gap-2">
-        <Stat label="Sessions" value={sessions ?? '…'} />
+      <div className="mb-4 grid grid-cols-3 gap-2">
+        <Stat label="Sessions" value={logs?.length ?? '…'} />
+        <Stat label="Volume (kg)" value={logs ? compactKg(totalVolume(logs)) : '…'} />
         <Stat label="Plan days" value={plan?.days.length ?? '–'} />
       </div>
 
@@ -70,7 +73,7 @@ export function Dashboard() {
       )}
 
       {plan && (
-        <>
+        <section className="mb-6">
           <h2 className="mb-2 text-sm font-medium text-muted-foreground">{plan.name}</h2>
           <div className="space-y-2">
             {plan.days.map((day, i) => (
@@ -96,7 +99,17 @@ export function Dashboard() {
               </Link>
             ))}
           </div>
-        </>
+        </section>
+      )}
+
+      {logs && logs.length > 0 && (
+        <section>
+          <div className="mb-2 flex items-baseline justify-between">
+            <h2 className="text-sm font-medium text-muted-foreground">Recent sessions</h2>
+            <Link to="/history" className="text-sm text-muted-foreground">See all</Link>
+          </div>
+          <SessionList logs={logs} limit={5} />
+        </section>
       )}
     </>
   )
@@ -104,7 +117,7 @@ export function Dashboard() {
 
 function Stat({ label, value }: { label: string; value: number | string }) {
   return (
-    <div className="rounded-xl border border-border bg-card px-4 py-3">
+    <div className="rounded-xl border border-border bg-card px-3 py-3">
       <div className="text-2xl font-semibold tabular-nums">{value}</div>
       <div className="text-xs text-muted-foreground">{label}</div>
     </div>

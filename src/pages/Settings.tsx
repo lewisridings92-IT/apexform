@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { addDemoHistory, removeDemoHistory } from '@/db/demo'
 import { generateAndSavePlan } from '@/db/plans'
 import { isInstalled, isStoragePersisted, requestPersistentStorage } from '@/db/storage'
 
@@ -64,7 +65,48 @@ export function Settings() {
           </Button>
         </CardContent>
       </Card>
+
+      {import.meta.env.DEV && <DevTools />}
     </>
+  )
+}
+
+// Only in `npm run dev`; removed from the build that goes on the phone.
+function DevTools() {
+  const [status, setStatus] = useState('')
+  return (
+    <Card className="mt-4 border-dashed">
+      <CardHeader>
+        <CardTitle>Developer</CardTitle>
+        <CardDescription>Only shown on the PC dev server.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={async () => {
+            try {
+              setStatus(`Added ${await addDemoHistory()} sample sessions.`)
+            } catch (e) {
+              setStatus(e instanceof Error ? e.message : String(e))
+            }
+          }}
+        >
+          Load sample history (8 weeks)
+        </Button>
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={async () => {
+            await removeDemoHistory()
+            setStatus('Sample sessions removed.')
+          }}
+        >
+          Remove sample history
+        </Button>
+        {status && <p className="text-sm text-muted-foreground">{status}</p>}
+      </CardContent>
+    </Card>
   )
 }
 

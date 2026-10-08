@@ -6,7 +6,10 @@ import { topSet } from '@/lib/calc'
 
 const kg = (n: number) => `${Number(n.toFixed(1))} kg`
 
-export function SessionSummary({ log, records }: { log: WorkoutLog; records: PersonalRecord[] }) {
+// `detailed` lists every completed set under each exercise.
+export function SessionSummary({
+  log, records, detailed = false,
+}: { log: WorkoutLog; records: PersonalRecord[]; detailed?: boolean }) {
   const stats = sessionStats(log)
   const done = log.exercises.filter((e) => e.sets.some((s) => s.completed))
 
@@ -49,12 +52,22 @@ export function SessionSummary({ log, records }: { log: WorkoutLog; records: Per
             const best = topSet(ex.sets)
             const count = ex.sets.filter((s) => s.completed).length
             return (
-              <div key={ex.name} className="flex justify-between gap-3">
-                <span>{ex.name}</span>
-                <span className="shrink-0 text-muted-foreground tabular-nums">
-                  {count} {count === 1 ? 'set' : 'sets'}
-                  {best && best.weight > 0 && ` · best ${kg(best.weight)} × ${best.reps}`}
-                </span>
+              <div key={ex.name}>
+                <div className="flex justify-between gap-3">
+                  <span>{ex.name}</span>
+                  <span className="shrink-0 text-muted-foreground tabular-nums">
+                    {count} {count === 1 ? 'set' : 'sets'}
+                    {best && best.weight > 0 && ` · best ${kg(best.weight)} × ${best.reps}`}
+                  </span>
+                </div>
+                {detailed && (
+                  <div className="text-xs text-muted-foreground tabular-nums">
+                    {ex.sets
+                      .filter((s) => s.completed)
+                      .map((s) => (s.weight > 0 ? `${Number(s.weight.toFixed(2))}×${s.reps}` : `${s.reps}`))
+                      .join(' · ')}
+                  </div>
+                )}
               </div>
             )
           })}
