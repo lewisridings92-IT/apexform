@@ -70,6 +70,7 @@ export interface LoggedExercise {
   target_sets: number
   target_reps: string
   target_rir: string
+  target_rest?: string // e.g. "2-3 min"; drives the rest timer
   sets: LoggedSet[]
 }
 

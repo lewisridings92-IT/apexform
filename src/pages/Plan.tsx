@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { ChevronDown, Clock, RefreshCw } from 'lucide-react'
 import { useState } from 'react'
+import { Link } from 'react-router'
 import { PageHeader } from '@/components/PageHeader'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -62,14 +63,16 @@ export function Plan() {
 
       <div className="space-y-2">
         {plan.days.map((day, i) => (
-          <DayCard key={day.day_name} day={day} open={open === i} onToggle={() => setOpen(open === i ? null : i)} />
+          <DayCard key={day.day_name} day={day} index={i} open={open === i} onToggle={() => setOpen(open === i ? null : i)} />
         ))}
       </div>
     </>
   )
 }
 
-function DayCard({ day, open, onToggle }: { day: PlanDay; open: boolean; onToggle: () => void }) {
+function DayCard({
+  day, index, open, onToggle,
+}: { day: PlanDay; index: number; open: boolean; onToggle: () => void }) {
   return (
     <section className="rounded-xl border border-border bg-card">
       <button type="button" aria-expanded={open} onClick={onToggle} className="flex w-full items-center gap-3 px-4 py-3 text-left">
@@ -104,8 +107,7 @@ function DayCard({ day, open, onToggle }: { day: PlanDay; open: boolean; onToggl
             ))}
           </ol>
           <div className="p-3">
-            {/* The workout logger arrives in Phase 5. */}
-            <Button className="w-full" disabled>
+            <Button className="w-full" render={<Link to={`/workout/${index}`} />}>
               Start this session
             </Button>
           </div>
