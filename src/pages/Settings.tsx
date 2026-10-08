@@ -40,9 +40,12 @@ export function Settings() {
           <CardTitle>Training profile</CardTitle>
           <CardDescription>Days, session length, equipment, goals and experience.</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-2">
           <Button variant="outline" className="w-full" render={<Link to="/onboarding" />}>
             Edit profile
+          </Button>
+          <Button variant="outline" className="w-full" render={<Link to="/anchors" />}>
+            Edit anchor lifts
           </Button>
         </CardContent>
       </Card>
